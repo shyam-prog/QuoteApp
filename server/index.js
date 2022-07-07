@@ -219,10 +219,42 @@ app.post('/deleteComment', async (req, res) => {
 
 })
 
+// app.post('/register', async (req, res) => {
+//     console.log(req.body);
+//     try {
+//         const newPassword = await bcrypt.hash(req.body.password, 10)
+//         await User.create({
+//             name: req.body.name,
+//             email: req.body.email,
+//             password: newPassword,
+//         })
+//         const token = jwt.sign({
+//             name: req.body.name,
+//             email: req.body.email,
+//         }, jwtKey, { expiresIn: '1h' })
+//         res.json({ status: "ok", user: token })
+//     } catch (err) {
+//         console.log(err);
+//         res.json({ status: 'error', error: 'Duplicate Email!' })
+//     }
+// })
+
 app.post('/register', async (req, res) => {
-    console.log(req.body);
+    const email = req.body.email;
+    const name = req.body.name;
+
+    let chars = "0123456789!@#$%^&*()abcdefghijklmnopqrstuvwxyz";
+    let pwd_length = 12;
+    let pwd = "";
+
+    for(var i = 0; i <= pwd_length; i++){
+        var randomNumber = Math.floor(Math.random() * chars.length);
+        pwd += chars.substring(randomNumber, randomNumber + 1);
+    }
+    console.log(pwd);
+
     try {
-        const newPassword = await bcrypt.hash(req.body.password, 10)
+        const newPassword = await bcrypt.hash(pwd, 10)
         await User.create({
             name: req.body.name,
             email: req.body.email,
